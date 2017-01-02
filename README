@@ -1,0 +1,12 @@
+Research-y prototype of LLDB-based crash dumper.
+
+Requires LLDB build in third_party/{bin/, include/, lib/, ...}, then 
+
+$ export LD_LIBRARY_PATH=`pwd`/third_party/lib
+$ ulimit -c unlimited
+$ ./m
+
+This builds a little program that will crash, runs it, uses LLDB API to print
+some information from the core file.
+
+Currently, only works on Linux.
