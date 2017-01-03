@@ -1,12 +1,31 @@
 Research-y prototype of LLDB-based crash dumper.
 
-Requires LLDB build in third_party/{bin/, include/, lib/, ...}, then 
+Linux:
 
-$ export LD_LIBRARY_PATH=`pwd`/third_party/lib
-$ ulimit -c unlimited
-$ ./m
+  Requires LLDB build in third_party/{bin/, include/, lib/, ...}, then 
 
-This builds a little program that will crash, runs it, uses LLDB API to print
-some information from the core file.
+  $ export LD_LIBRARY_PATH=`pwd`/third_party/lib
+  $ ulimit -c unlimited
+  $ ./m
 
-Currently, only works on Linux.
+  This builds a little program that will crash, runs it, uses LLDB API to print
+  some information from the core file.
+
+Windows:
+
+  Requires LLDB build in third_party/{bin/, include/, lib/, ...}. Something
+  like:
+
+      call "c:\Program Files (x86)\Microsoft Visual Studio 14.0\vc\vcvarsall.bat" amd64
+      mkdir build
+      cd build
+      set PATH=%PATH%;...\swigwin-3.0.5
+      call cmake -G Ninja -DCMAKE_INSTALL_PREFIX:PATH=...\PATH_TO_CD\third_party -DLLDB_DISABLE_PYTHON=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo ..\llvm
+      cd..
+      ninja install
+  
+  Then :
+
+  > Copy `core` file and `crash` binary from Linux box.
+  > PATH=%PATH%;...\PATH_TO_CD\third_party\bin
+  > m.bat

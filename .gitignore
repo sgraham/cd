@@ -1,5 +1,10 @@
+*.ilk
+*.obj
+*.pdb
 cd
+cd.exe
 core
 crash
+crash.exe
 tags
 third_party

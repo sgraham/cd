@@ -8,16 +8,12 @@
 using namespace lldb;
 
 class ScopedLLDB {
-public:
-  ScopedLLDB() {
-    SBDebugger::Initialize();
-  }
-  ~ScopedLLDB() {
-    SBDebugger::Terminate();
-  }
+ public:
+  ScopedLLDB() { SBDebugger::Initialize(); }
+  ~ScopedLLDB() { SBDebugger::Terminate(); }
 };
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char const* argv[]) {
   ScopedLLDB sentry;
 
   SBDebugger debugger(SBDebugger::Create());
@@ -36,15 +32,15 @@ int main(int argc, char const *argv[]) {
     return 1;
   }
 
-  const char *exe_file_path = argv[1];
+  const char* exe_file_path = argv[1];
   const bool add_dependent_libs = false;
   SBError error;
   SBStream strm;
   strm.RedirectToFileHandle(stdout, false);
 
   // Create a target using the executable.
-  SBTarget target = debugger.CreateTarget(exe_file_path, arch, platform,
-                                          add_dependent_libs, error);
+  SBTarget target = debugger.CreateTarget(
+      exe_file_path, arch, platform, add_dependent_libs, error);
   if (!error.Success()) {
     fprintf(stderr, "error: %s\n", error.GetCString());
     exit(1);
@@ -53,7 +49,8 @@ int main(int argc, char const *argv[]) {
   SBProcess process = target.LoadCore("core");
 
   printf("num threads: %d\n", process.GetNumThreads());
-  for (int thread_i = 0; thread_i < process.GetNumThreads(); ++thread_i) {
+  for (unsigned int thread_i = 0; thread_i < process.GetNumThreads();
+       ++thread_i) {
     SBThread thread = process.GetThreadAtIndex(thread_i);
     int num_frames = thread.GetNumFrames();
     printf("  thread %d, num frames: %d\n", thread_i, num_frames);
@@ -61,7 +58,7 @@ int main(int argc, char const *argv[]) {
       SBFrame frame = thread.GetFrameAtIndex(i);
       printf("    frame %d: %s\n", i, frame.GetDisplayFunctionName());
       SBValueList value_list = frame.GetVariables(true, true, true, true);
-      for (int j = 0; j < value_list.GetSize(); ++j) {
+      for (unsigned int j = 0; j < value_list.GetSize(); ++j) {
         SBValue value = value_list.GetValueAtIndex(j);
         printf("      %s %s (@ %s) = %s",
                value.GetDisplayTypeName(),
